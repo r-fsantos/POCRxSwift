@@ -19,6 +19,8 @@
 		88C5FF1429B6B8230053F63E /* RxCocoa in Frameworks */ = {isa = PBXBuildFile; productRef = 88C5FF1329B6B8230053F63E /* RxCocoa */; };
 		88C5FF1629B6B8230053F63E /* RxRelay in Frameworks */ = {isa = PBXBuildFile; productRef = 88C5FF1529B6B8230053F63E /* RxRelay */; };
 		88C5FF1829B6B8230053F63E /* RxSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 88C5FF1729B6B8230053F63E /* RxSwift */; };
+		88C5FF1C29B7A6CD0053F63E /* String+Error.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88C5FF1B29B7A6CD0053F63E /* String+Error.swift */; };
+		88C5FF1E29B7AB9E0053F63E /* ViewController+Traits.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88C5FF1D29B7AB9E0053F63E /* ViewController+Traits.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -52,6 +54,8 @@
 		88C5FEFF29B225A40053F63E /* POCRxSwiftUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = POCRxSwiftUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		88C5FF0329B225A40053F63E /* POCRxSwiftUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = POCRxSwiftUITests.swift; sourceTree = "<group>"; };
 		88C5FF0529B225A40053F63E /* POCRxSwiftUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = POCRxSwiftUITestsLaunchTests.swift; sourceTree = "<group>"; };
+		88C5FF1B29B7A6CD0053F63E /* String+Error.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String+Error.swift"; sourceTree = "<group>"; };
+		88C5FF1D29B7AB9E0053F63E /* ViewController+Traits.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ViewController+Traits.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -108,10 +112,12 @@
 				88C5FEDF29B225A20053F63E /* AppDelegate.swift */,
 				88C5FEE129B225A20053F63E /* SceneDelegate.swift */,
 				88C5FEE329B225A20053F63E /* ViewController.swift */,
+				88C5FF1D29B7AB9E0053F63E /* ViewController+Traits.swift */,
 				88C5FEEB29B225A40053F63E /* Assets.xcassets */,
 				88C5FEED29B225A40053F63E /* LaunchScreen.storyboard */,
 				88C5FEF029B225A40053F63E /* Info.plist */,
 				88C5FEE829B225A20053F63E /* POCRxSwift.xcdatamodeld */,
+				88C5FF1B29B7A6CD0053F63E /* String+Error.swift */,
 			);
 			path = POCRxSwift;
 			sourceTree = "<group>";
@@ -296,6 +302,8 @@
 			files = (
 				88C5FEEA29B225A20053F63E /* POCRxSwift.xcdatamodeld in Sources */,
 				88C5FEE429B225A20053F63E /* ViewController.swift in Sources */,
+				88C5FF1C29B7A6CD0053F63E /* String+Error.swift in Sources */,
+				88C5FF1E29B7AB9E0053F63E /* ViewController+Traits.swift in Sources */,
 				88C5FEE029B225A20053F63E /* AppDelegate.swift in Sources */,
 				88C5FEE229B225A20053F63E /* SceneDelegate.swift in Sources */,
 			);
