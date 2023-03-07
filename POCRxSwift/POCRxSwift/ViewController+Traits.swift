@@ -9,7 +9,7 @@ import Foundation
 import RxSwift
 import RxRelay
 
-
+// swiftlint:disable all
 // MARK: - Traits: Características de observáveis
 ///
 /// `Produzem apenas um elemento. Ou emitem completed, erro
