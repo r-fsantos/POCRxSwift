@@ -36,6 +36,8 @@ import RxSwift
 
 final class ViewController: UIViewController {
 
+    // MARK: - A referência DisposeBag deve ser a mesma que guarda as referências de observer/observable
+    /// Quando a ViewController for desalocada, ira desalocar os observers/observables e também a disposeBag
     private let disposeBag = DisposeBag()
 
     override func viewDidLoad() {
@@ -44,6 +46,10 @@ final class ViewController: UIViewController {
         view.backgroundColor = .lightGray
         title = "POCRxSwift"
 
+        traits()
+    }
+
+    private func traits() {
         testingSingleTrait()
         testingCompletableTrait()
         testingMaybeTrait()
