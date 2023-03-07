@@ -27,7 +27,7 @@ final class ViewController: UIViewController {
         view.backgroundColor = .lightGray
         title = "POCRxSwift"
 
-//        traits()
+        //        traits()
         observables()
     }
 
@@ -39,10 +39,21 @@ final class ViewController: UIViewController {
 
     private func observables() {
         // Emissão de vários eventos
+        //        testingPublishSubject(withDisposeBag: disposeBag)
+//        testingBehaviorSubject(withDiposeBag: disposeBag)
+        testingReplaySubject(withDisposeBag: disposeBag)
 
-        // MARK: - PublishSubject
-        /// `Repassa apenas os valores emitidos após o registro ao Observável`
-        /// `Não armazena os eventos, apenas emite/repassa.`
+    }
+
+}
+
+// MARK: PublishSubject
+extension ViewController {
+
+    // PublishSubject
+    /// `Repassa apenas os valores emitidos após o registro ao Observável`
+    /// `Não armazena os eventos, apenas emite/repassa.`
+    func testingPublishSubject(withDisposeBag disposeBag: DisposeBag) {
         let publishObservable = PublishSubject<String>()
 
         publishObservable.subscribe(onNext: { string in
@@ -53,20 +64,76 @@ final class ViewController: UIViewController {
             print("publishObservable onCompleted")
         }).disposed(by: disposeBag)
 
+        print("Type of publishObservable: ", type(of: publishObservable))
+
         publishObservable.onNext("primeiro elemento")
         publishObservable.onNext("segundo elemento")
         publishObservable.onNext("terceiro elemento")
         publishObservable.onNext("quarto elemento")
 
-        // MARK: - BehaviorSubject
-        /// `Emite o valor inicial e valores subsequentes`
-        //        BehaviorSubject()
-
-        // MARK: - ReplaySubject
-        /// `Possui um buffer com tamanho específico, que pode ser sobrescrito.
-        /// `Objetos que se registram recebem os valores atuais do buffer e os subsequentes.`
-        //        ReplaySubject()
-//        PublishRelay()
+        publishObservable.onCompleted()
+        publishObservable.onError("Erro!")
     }
 
+}
+
+// MARK: BehaviorSubject
+extension ViewController {
+
+    /// `Emite o último valor e valores subsequentes`
+    func testingBehaviorSubject(withDiposeBag disposeBag: DisposeBag) {
+        let behaviorObservable = BehaviorSubject<String>(value: "ELEMENTO ZERO")
+
+        behaviorObservable.onNext("SOBRESCREVE O ELEMENTO ZERO")
+
+        behaviorObservable.subscribe(onNext: { string in
+            print("behaviorObservable onNext: \(string)")
+        }, onError: { error in
+            print("behaviorObservable onError: \(error.localizedDescription)")
+        }, onCompleted: {
+            print("behaviorObservable onCompleted")
+        })
+            .disposed(by: disposeBag)
+
+        behaviorObservable.onNext("primeiro elemento")
+        behaviorObservable.onNext("segundo elemento")
+        behaviorObservable.onNext("terceiro elemento")
+        behaviorObservable.onNext("quarto elemento")
+
+        behaviorObservable.onCompleted()
+        behaviorObservable.onError("Erro!")
+
+        let value = try? behaviorObservable.value()
+        print("Value:", value ?? "empty")
+    }
+
+}
+
+// MARK: - ReplaySubject
+extension ViewController {
+
+    /// `Possui um buffer com tamanho específico, que pode ser sobrescrito.
+    /// `Objetos que se registram recebem os valores atuais do buffer e os subsequentes.`
+    /// `Atenção que é guardado ANTES do SUBSCRIBE`
+    func testingReplaySubject(withDisposeBag disposeBag: DisposeBag) {
+        let replayObservable = ReplaySubject<String>.create(bufferSize: 2)
+
+        replayObservable.onNext("primeiro elemento")
+        replayObservable.onNext("segundo elemento")
+        replayObservable.onNext("terceiro elemento")
+        replayObservable.onNext("quarto elemento")
+
+        replayObservable.subscribe(onNext: { string in
+            print("replayObservable onNext: \(string)")
+        }, onError: { error in
+            print("replayObservable onError: \(error.localizedDescription)")
+        }, onCompleted: {
+            print("replayObservable onCompleted")
+        }).disposed(by: disposeBag)
+
+        replayObservable.onNext("quinto elemento")
+
+        replayObservable.onCompleted()
+
+    }
 }
