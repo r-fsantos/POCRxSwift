@@ -20,21 +20,23 @@ import RxSwift
 /// `ou seja, não podem ser usados em fluxos/streams complexos.`
 ///
 /// `Single: Emite apenas um único elemento ou erro.`
-///     Ex: Integração com API. Execução async (Success, Error).
+///     Ex: Integração com API. Execução async (Success, Failure).
 ///     Não tem side effects, para outros observáveis. excelente
 ///
-/// `Completable: Não emite valores. Apenas completude ou erro. Doesn't share side effects.`
+/// `Completable: Não emite valores. Apenas completude ou error. Doesn't share side effects.`
 ///     onCompleted
 ///     Ex: Cache. Vc só precisa saber se deu sucesso ou falha!
 ///
 /// `Maybe: Pode emitir
 ///     `um elemento ou não!`
 ///     `onCompleted`
-///     `onError`
+///     `onFailure`
 ///     Ex: Não é muito utilizado, mas saibamos que existe
 ///
 
 final class ViewController: UIViewController {
+
+    private let disposeBag = DisposeBag()
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -42,47 +44,70 @@ final class ViewController: UIViewController {
         view.backgroundColor = .lightGray
         title = "POCRxSwift"
 
-        // testing traits
-        createsSingleTrait()
-        createsCompletableTrait()
-        createsMaybeTrait()
+        testingSingleTrait()
+        testingCompletableTrait()
+        testingMaybeTrait()
     }
 
 }
 
-// MARK: - Single Trait. Observar sua assinatura, comportamento e retorno.
 private extension ViewController {
-
-    private func createsSingleTrait() {
-        let singleObservable = Single<String>.create { single in
+    // MARK: - Creating a Single Trait
+    private func fetchSingleTrait() -> Single<String> {
+        Single<String>.create { single in
             single(.success("Deu bom"))
+
+            //            let error = NSError(domain: "Deu ruim", code: 0)
+            //            single(.failure(error))
 
             // Dúvida!
             return Disposables.create()
         }
 
-        _ = singleObservable.subscribe(onSuccess: { print("Single: onSuccess: \($0)") },
-                                       onFailure: { print("Single: onFailure: \($0)") },
-                                       onDisposed: { print("Single: onDisposed") })
+    }
+
+    // MARK: - Testing Single Trait
+    private func testingSingleTrait() {
+        _ = fetchSingleTrait().subscribe(onSuccess: { print("Single: onSuccess: \($0)") },
+                                         onFailure: { print("Single: onFailure: \($0)") },
+                                         onDisposed: { print("Single: onDisposed") })
+
+        print("=========================================================")
+
+        fetchSingleTrait().subscribe(onSuccess: { string in
+            print("Single with disposeBag: onSuccess: \(string)")
+        }, onFailure: { failure in
+            print("Single with disposeBag: onFailure: \(failure.localizedDescription)")
+        }).disposed(by: disposeBag)
     }
 
 }
 
-// MARK: - Completable Trait
 private extension ViewController {
-
-    private func createsCompletableTrait() {
-        let completableObservable = Completable.create { completable in
+    // MARK: - Creating a Completable Trait
+    private func fetchCompletableTrait() -> Completable {
+        Completable.create { completable in
             completable(.completed)
 
             return Disposables.create()
         }
+    }
 
-        _ = completableObservable.subscribe(
+    // MARK: - Testing a Completable Trait
+    private func testingCompletableTrait() {
+        _ = fetchCompletableTrait().subscribe(
             onCompleted: { print("Completable: onCompleted") },
             onError: { error in print("Completable: onError: \(error.localizedDescription)") },
             onDisposed: { print("Completable: onDisposed") }
-        )
+            )
+
+        print("=========================================================")
+
+        fetchCompletableTrait().subscribe(onCompleted: {
+            print("Completable with disposeBag: onCompleted")
+        }, onError: { error in
+            print("Completable with disposeBag: onError: \(error.localizedDescription)")
+        }).disposed(by: disposeBag)
     }
 
 }
@@ -90,8 +115,9 @@ private extension ViewController {
 // MARK: - Maybe Trait
 private extension ViewController {
 
-    private func createsMaybeTrait() {
-        let maybeObservable = Maybe<String>.create { maybe in
+    // MARK: - Creating a Maybe Trait
+    private func fetchMaybeTrait() -> Maybe<String> {
+        Maybe<String>.create { maybe in
             maybe(.success("Deu bom no Maybe"))
 
             maybe(.completed)
@@ -101,10 +127,25 @@ private extension ViewController {
 
             return Disposables.create()
         }
-        _ = maybeObservable.subscribe(onSuccess: { print("Maybe: onSuccess: \($0)") },
+    }
+
+    // MARK: - Testing a Maybe Trait
+    private func testingMaybeTrait() {
+        _ = fetchMaybeTrait().subscribe(onSuccess: { print("Maybe: onSuccess: \($0)") },
                                       onError: { error in print("Maybe: onError \(error.localizedDescription)") },
                                       onCompleted: { print("Maybe: onCompleted") },
                                       onDisposed: { print("Maybe: onDisposed") })
+
+        print("=========================================================")
+
+        fetchMaybeTrait().subscribe(onSuccess: { string in
+            print("Maybe with disposeBag: onSuccess: \(string)")
+        }, onError: { error in
+            print("Maybe with disposeBag: onError: \(error.localizedDescription)")
+        }, onCompleted: {
+            print("Maybe with disposeBag: onCompleted")
+        }).disposed(by: disposeBag)
+
     }
 
 }
